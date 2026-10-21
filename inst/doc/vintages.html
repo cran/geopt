@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Boundary vintages and older data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Boundary vintages and older data</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(geopt)</span></code></pre></div>
+<p>Portugal’s boundaries are redrawn from time to time. Data collected
+before a change uses the old units, so comparing it with newer data, or
+putting it on today’s map, requires knowing how the old units relate to
+the new ones. geopt calls each version of a set of boundaries a
+<em>vintage</em>.</p>
+<p>Three things change, on separate schedules, so geopt tracks each
+separately:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What changes</th>
+<th>Argument</th>
+<th>Vintages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Freguesias</td>
+<td><code>admin_vintage</code></td>
+<td><code>&quot;2001&quot;</code>, <code>&quot;2011&quot;</code>, <code>&quot;2013&quot;</code>,
+<code>&quot;2025&quot;</code> (current)</td>
+</tr>
+<tr class="even">
+<td>NUTS regions</td>
+<td><code>nuts_vintage</code></td>
+<td><code>&quot;2002&quot;</code>, <code>&quot;2013&quot;</code>, <code>&quot;2024&quot;</code>
+(current)</td>
+</tr>
+<tr class="odd">
+<td>Health regions</td>
+<td><code>health_vintage</code></td>
+<td><code>&quot;2022&quot;</code>, <code>&quot;2024&quot;</code> (current)</td>
+</tr>
+</tbody>
+</table>
+<p>Vintages are always named by their year. If you leave the vintage
+argument out, the current vintage is returned by default (which may
+change when geopt adds a newer map). To keep a script’s meaning fixed,
+name the year: <code>&quot;2025&quot;</code> will always mean the 2025 map.</p>
+<p>Municipalities haven’t changed since 1998, so a municipality code
+means the same thing in every vintage.</p>
+<p>The chart shows when each vintage was in force. Each bar is labelled
+with the value to pass, and the number under it is how many units that
+vintage has (for NUTS, the number of NUTS 3 regions):</p>
+<p><img role="img" aria-label="Timeline from 1995 with one row each for freguesias, NUTS 3 regions and health units, showing the years each vintage was in force." src="data:image/png;base64,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" alt="Timeline from 1995 with one row each for freguesias, NUTS 3 regions and health units, showing the years each vintage was in force." width="100%" /></p>
+<p>The darker bars are the current vintages. A vintage’s name isn’t
+always the year it came into force: the 2013 NUTS revision, for example,
+has been in use since 2015. Two bars fade in, because those maps have no
+single start date: geopt has the freguesias as the 2001 census recorded
+them, and the health units as they stood just before the 2024 reform.
+The gap between the first two freguesia maps is when new freguesias were
+being created one at a time (see below).</p>
+<p>This guide covers freguesias and NUTS regions. Health regions have
+their own guide, <code>vignette(&quot;health-geographies&quot;)</code>.</p>
+<div id="how-the-freguesias-changed" class="section level2">
+<h2>How the freguesias changed</h2>
+<p>geopt has four freguesia maps:</p>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>admin_vintage</code></th>
+<th>In force</th>
+<th>Freguesias</th>
+<th>Used by</th>
+<th>Law</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;2001&quot;</code></td>
+<td>until 2001</td>
+<td>4,241</td>
+<td>the 2001 census</td>
+<td>no single law (see below)</td>
+</tr>
+<tr class="even">
+<td><code>&quot;2011&quot;</code></td>
+<td>2004 to 2013</td>
+<td>4,260</td>
+<td>the 2011 census</td>
+<td>no single law (see below)</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;2013&quot;</code></td>
+<td>2013 to 2025</td>
+<td>3,092</td>
+<td>the 2021 census</td>
+<td>Lei 11-A/2013, and Lei 56/2012 for Lisboa</td>
+</tr>
+<tr class="even">
+<td><code>&quot;2025&quot;</code></td>
+<td>since 2025</td>
+<td>3,259</td>
+<td>today’s official boundaries (CAOP)</td>
+<td>Lei 25-A/2025</td>
+</tr>
+</tbody>
+</table>
+<p>In 2013, about half of all freguesias were merged into <em>uniões de
+freguesias</em> (unions of freguesias). In 2025, 302 freguesias that had
+been merged were restored.</p>
+<p>Neither of the maps before 2013 was made by a single law: freguesias
+were created one law at a time. So those two maps are named after the
+census that recorded them, and the later two after their reform.</p>
+<p>Between the two censuses, 22 freguesias were created and 3 dissolved,
+by laws of 2001, 2002 and 2003. The 2011 map reached its final form on 1
+January 2004, when the last three came into being: Corvite, Lixa do
+Alvão and Nossa Senhora de Fátima (Leis 62/2003, 63/2003 and 68/2003).
+geopt has the map from before these changes (<code>&quot;2001&quot;</code>) and
+from after them (<code>&quot;2011&quot;</code>), but not the ones in between.</p>
+<p>The 1991 census used an earlier map again, with 4,208 freguesias in
+305 municipalities: Odivelas, Trofa and Vizela were only created in
+1998. geopt has no vintage for it.</p>
+<p><code>pt_crosswalk()</code> shows how the freguesias of two vintages
+correspond:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">pt_crosswalk</span>(<span class="st">&quot;2013&quot;</span>, <span class="st">&quot;2025&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">table</span>(x<span class="sc">$</span>relation)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; renumbered      split  unchanged </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;          1        301       2957</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th><code>relation</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>unchanged</code></td>
+<td>same territory, code and name</td>
+</tr>
+<tr class="even">
+<td><code>renamed</code></td>
+<td>same territory and code, new name</td>
+</tr>
+<tr class="odd">
+<td><code>renumbered</code></td>
+<td>same territory, new code</td>
+</tr>
+<tr class="even">
+<td><code>merged</code></td>
+<td>several old freguesias became one (the 2013 uniões)</td>
+</tr>
+<tr class="odd">
+<td><code>split</code></td>
+<td>one old freguesia became several (the 2025 restorations)</td>
+</tr>
+</tbody>
+</table>
+<p>For example, the união of Águeda and Borralha became two freguesias
+again in 2025:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>x[x<span class="sc">$</span>from <span class="sc">==</span> <span class="st">&quot;010121&quot;</span>, ]</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;      from     to                                 name_from  name_to relation</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; 11 010121 010130 União das freguesias de Águeda e Borralha   Águeda    split</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 14 010121 010133 União das freguesias de Águeda e Borralha Borralha    split</span></span></code></pre></div>
+<p>The one <code>renumbered</code> freguesia is Colos, which kept its
+territory in 2025 but got a new code.</p>
+<p><strong>A code only identifies a freguesia within its own
+vintage.</strong> None of the freguesias restored in 2025 got its
+pre-2013 code back. Don’t join data from one vintage onto codes from
+another: go through <code>pt_crosswalk()</code> or
+<code>pt_recode()</code>.</p>
+</div>
+<div id="bringing-older-data-onto-todays-map" class="section level2">
+<h2>Bringing older data onto today’s map</h2>
+<p><code>pt_recode()</code> converts a data frame from one vintage to
+another. What it should do with the values depends on the direction, and
+on what kind of value they are:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Counts (cases, population)</th>
+<th>Rates, averages, medians</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Several old freguesias become one</td>
+<td>add them up: <code>aggregate = sum</code></td>
+<td>can’t be combined: convert the counts, then recompute</td>
+</tr>
+<tr class="even">
+<td>One old freguesia becomes several</td>
+<td>share them out: <code>split = &quot;weight&quot;</code></td>
+<td>copy to each: <code>split = &quot;replicate&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>pt_recode()</code> won’t guess. It stops if a merge happens
+without <code>aggregate</code>, or a split without
+<code>split</code>.</p>
+<div id="from-the-2013-map-splits" class="section level3">
+<h3>From the 2013 map: splits</h3>
+<p>Data from 2013 to 2025, such as the 2021 census, has one value per
+união. Some uniões are several freguesias now, and there’s no exact way
+to divide a value between them, so choose how:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>old <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dtmnfr =</span> <span class="st">&quot;010121&quot;</span>, <span class="at">casos =</span> <span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># Copy the value to every restored freguesia (right for rates)</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">pt_recode</span>(old, <span class="at">from =</span> <span class="st">&quot;2013&quot;</span>, <span class="at">values =</span> <span class="st">&quot;casos&quot;</span>, <span class="at">split =</span> <span class="st">&quot;replicate&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;   dtmnfr freguesia casos</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 1 010130    Águeda   100</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 2 010133  Borralha   100</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># Share it out in proportion to area</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">pt_recode</span>(old, <span class="at">from =</span> <span class="st">&quot;2013&quot;</span>, <span class="at">values =</span> <span class="st">&quot;casos&quot;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>          <span class="at">split =</span> <span class="st">&quot;weight&quot;</span>, <span class="at">weights =</span> <span class="st">&quot;area&quot;</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;   dtmnfr freguesia    casos</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; 1 010130    Águeda 75.84466</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; 2 010133  Borralha 24.15534</span></span></code></pre></div>
+<p>Area is a rough guide, because people don’t spread out evenly. If a
+better weight is available, such as population, pass it as a named
+vector keyed by the current code:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;010130&quot;</span> <span class="ot">=</span> <span class="dv">14000</span>, <span class="st">&quot;010133&quot;</span> <span class="ot">=</span> <span class="dv">5000</span>)  <span class="co"># population per freguesia</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">pt_recode</span>(old, <span class="at">from =</span> <span class="st">&quot;2013&quot;</span>, <span class="at">values =</span> <span class="st">&quot;casos&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>          <span class="at">split =</span> <span class="st">&quot;weight&quot;</span>, <span class="at">weights =</span> pop)</span></code></pre></div>
+</div>
+<div id="from-before-2013-mostly-merges" class="section level3">
+<h3>From before 2013: mostly merges</h3>
+<p>Going from the pre-2013 map to today is mostly the opposite: several
+old freguesias now form one união, so their counts are added up. These
+three old freguesias of Anadia are one freguesia today:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>old <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dtmnfr =</span> <span class="fu">c</span>(<span class="st">&quot;010301&quot;</span>, <span class="st">&quot;010302&quot;</span>, <span class="st">&quot;010314&quot;</span>),</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                  <span class="at">pop =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">800</span>, <span class="dv">300</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">pt_recode</span>(old, <span class="at">from =</span> <span class="st">&quot;2011&quot;</span>, <span class="at">values =</span> <span class="st">&quot;pop&quot;</span>, <span class="at">aggregate =</span> sum)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;   dtmnfr                                                              freguesia</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; 1 010316 União das freguesias de Amoreira da Gândara, Paredes do Bairro e Ancas</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;    pop</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 1 1600</span></span></code></pre></div>
+<p>Not every old freguesia was merged. Many are unchanged, and those
+restored in 2025 match a current freguesia one to one:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>x11 <span class="ot">&lt;-</span> <span class="fu">pt_crosswalk</span>(<span class="st">&quot;2011&quot;</span>, <span class="st">&quot;2025&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">table</span>(x11<span class="sc">$</span>relation)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;     merged    renamed renumbered  unchanged </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;       1753         20        310       2177</span></span></code></pre></div>
+<p>If the data has only some members of a união, the total covers the
+ones present, and a warning says the group is incomplete.</p>
+</div>
+<div id="when-only-names-are-available" class="section level3">
+<h3>When only names are available</h3>
+<p>People working with older files often have only freguesia names but
+no codes. <code>name_from</code> holds the name each freguesia had at
+the time, which is usually not today’s name:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>x11[x11<span class="sc">$</span>to <span class="sc">==</span> <span class="st">&quot;030364&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;from&quot;</span>, <span class="st">&quot;name_from&quot;</span>, <span class="st">&quot;name_to&quot;</span>)]</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt;       from         name_from</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; 442 030307  Braga (Cividade)</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 443 030324 Braga (Maximinos)</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 444 030352        Braga (Sé)</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;                                                      name_to</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 442 União das freguesias de Braga (Maximinos, Sé e Cividade)</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 443 União das freguesias de Braga (Maximinos, Sé e Cividade)</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 444 União das freguesias de Braga (Maximinos, Sé e Cividade)</span></span></code></pre></div>
+<p><code>pt_match()</code> recognizes these older names, and returns the
+freguesia that covers the same place today:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>old <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">freg =</span> <span class="fu">c</span>(<span class="st">&quot;Sé&quot;</span>, <span class="st">&quot;Maximinos&quot;</span>, <span class="st">&quot;Cividade&quot;</span>, <span class="st">&quot;Gualtar&quot;</span>),</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                  <span class="at">mun =</span> <span class="st">&quot;Braga&quot;</span>, <span class="at">pop =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>old<span class="sc">$</span>dtmnfr <span class="ot">&lt;-</span> <span class="fu">pt_match</span>(old<span class="sc">$</span>freg, <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>, <span class="at">context =</span> old<span class="sc">$</span>mun,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                        <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>old</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt;        freg   mun pop dtmnfr</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 1        Sé Braga 100 030364</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 2 Maximinos Braga 200 030364</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; 3  Cividade Braga 300 030364</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 4   Gualtar Braga 400 030319</span></span></code></pre></div>
+<p>The first three were merged in 2013, so they now share one code. Add
+them up before joining:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">aggregate</span>(pop <span class="sc">~</span> dtmnfr, old, sum)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt;   dtmnfr pop</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; 1 030319 400</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; 2 030364 600</span></span></code></pre></div>
+<p>To get the code each freguesia had before 2013 instead, pass
+<code>admin_vintage = &quot;2011&quot;</code>. Each old freguesia then keeps its
+own code, and <code>pt_recode()</code> can convert the data from
+there:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dtmnfr =</span> <span class="fu">pt_match</span>(old<span class="sc">$</span>freg, <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>,</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>                                   <span class="at">context =</span> old<span class="sc">$</span>mun, <span class="at">admin_vintage =</span> <span class="st">&quot;2011&quot;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                                   <span class="at">quiet =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                <span class="at">pop =</span> old<span class="sc">$</span>pop)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>d</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;   dtmnfr pop</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; 1 030352 100</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; 2 030324 200</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; 3 030307 300</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; 4 030319 400</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="fu">pt_recode</span>(d, <span class="at">from =</span> <span class="st">&quot;2011&quot;</span>, <span class="at">values =</span> <span class="st">&quot;pop&quot;</span>, <span class="at">aggregate =</span> sum)</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;   dtmnfr                                                freguesia pop</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; 1 030364 União das freguesias de Braga (Maximinos, Sé e Cividade) 600</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; 2 030319                                                  Gualtar 400</span></span></code></pre></div>
+<p>With <code>admin_vintage = &quot;2011&quot;</code>, a <em>current</em> name
+only matches if that freguesia had a single predecessor. A união that
+absorbed several returns <code>NA</code>, because nothing says which of
+them was meant.</p>
+</div>
+<div id="data-from-the-2001-census" class="section level3">
+<h3>Data from the 2001 census</h3>
+<p>Most freguesias of the 2001 map are the same in 2011, with the same
+code. The exceptions are 17: 3 that were dissolved, and 14 that gave up
+part of their territory to a new freguesia but kept their code. In 2001,
+for example, Ponte (Guimarães) still included Corvite:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>x01 <span class="ot">&lt;-</span> <span class="fu">pt_crosswalk</span>(<span class="st">&quot;2001&quot;</span>, <span class="st">&quot;2011&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>x01[x01<span class="sc">$</span>from <span class="sc">==</span> <span class="st">&quot;030838&quot;</span>, ]</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;       from     to name_from name_to relation</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; 611 030838 030838     Ponte   Ponte    split</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; 643 030838 030874     Ponte Corvite    split</span></span></code></pre></div>
+<p>So a value for Ponte in 2001 data covers two freguesias of the 2011
+map. With <code>from = &quot;2001&quot;</code>, <code>pt_recode()</code> treats it
+as the split it is; read as 2011 data, all of it would silently go to
+the smaller Ponte:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">pt_recode</span>(<span class="fu">data.frame</span>(<span class="at">dtmnfr =</span> <span class="st">&quot;030838&quot;</span>, <span class="at">taxa =</span> <span class="fl">4.2</span>), <span class="at">from =</span> <span class="st">&quot;2001&quot;</span>,</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>          <span class="at">to =</span> <span class="st">&quot;2011&quot;</span>, <span class="at">values =</span> <span class="st">&quot;taxa&quot;</span>, <span class="at">split =</span> <span class="st">&quot;replicate&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;   dtmnfr freguesia taxa</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; 1 030838     Ponte  4.2</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 2 030874   Corvite  4.2</span></span></code></pre></div>
+<p>Names work the same way: with <code>admin_vintage = &quot;2001&quot;</code>,
+<code>pt_match()</code> returns the 2001 code, and it matches names that
+were gone by 2011, such as Agualva-Cacém.</p>
+<p>The 2001 census areas from <code>get_censos()</code> give two
+freguesias a different code from INE’s own list, because both had moved
+to another municipality: Vale de Amoreira (<code>090756</code> instead
+of <code>090804</code>) and Moita (<code>100117</code> instead of
+<code>101003</code>). <code>pt_recode()</code> and
+<code>pt_match()</code> accept both codes for <code>&quot;2001&quot;</code>.</p>
+</div>
+<div id="the-other-way-todays-data-on-the-2013-map" class="section level3">
+<h3>The other way: today’s data on the 2013 map</h3>
+<p>To compare current data with the 2021 census, convert it back to the
+2013 map. The restored freguesias go back into their união, so this is a
+merge:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>members <span class="ot">&lt;-</span> x<span class="sc">$</span>to[x<span class="sc">$</span>from <span class="sc">==</span> <span class="st">&quot;010121&quot;</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dtmnfr =</span> members, <span class="at">casos =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">10</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">pt_recode</span>(df, <span class="at">from =</span> <span class="st">&quot;2025&quot;</span>, <span class="at">to =</span> <span class="st">&quot;2013&quot;</span>, <span class="at">values =</span> <span class="st">&quot;casos&quot;</span>, <span class="at">aggregate =</span> sum)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt;   dtmnfr                                 freguesia casos</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; 1 010121 União das freguesias de Águeda e Borralha    40</span></span></code></pre></div>
+</div>
+</div>
+<div id="maps-of-another-vintage" class="section level2">
+<h2>Maps of another vintage</h2>
+<p><code>get_map()</code> draws the 2025 map.
+<code>admin_vintage = &quot;2013&quot;</code> draws the map in force from the 2013
+reform until the 2025 restorations, from DGT’s official boundaries (CAOP
+2024, the last release on that map). The first call downloads and
+simplifies them, which takes a few minutes and needs the rmapshaper
+package. After that the result is cached, so later calls take
+seconds:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>m2013 <span class="ot">&lt;-</span> <span class="fu">get_map</span>(<span class="st">&quot;freguesia&quot;</span>, <span class="at">admin_vintage =</span> <span class="st">&quot;2013&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">sum</span>(m2013<span class="sc">$</span>geopt_type <span class="sc">==</span> <span class="st">&quot;boundary&quot;</span>)   <span class="co"># 3092 freguesias</span></span></code></pre></div>
+<p>Data on the 2013 map then goes straight onto it, without converting.
+Names are matched against the 2013 freguesias, so that map’s uniões are
+found by name:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">get_map</span>(<span class="st">&quot;freguesia&quot;</span>, <span class="at">admin_vintage =</span> <span class="st">&quot;2013&quot;</span>, <span class="at">data =</span> data_2021, <span class="at">by =</span> <span class="st">&quot;dtmnfr&quot;</span>)</span></code></pre></div>
+<p>Each 2013 freguesia has the last name it carried on that map, the one
+INE publishes. Names it had earlier match as well:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Buarcos e São Julião&quot;</span>, <span class="st">&quot;Buarcos&quot;</span>), <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>,</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>         <span class="at">context =</span> <span class="st">&quot;Figueira da Foz&quot;</span>, <span class="at">admin_vintage =</span> <span class="st">&quot;2013&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;060520&quot; &quot;060520&quot;</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt;                  input         matched_name   code method dist</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt; 1 Buarcos e São Julião Buarcos e São Julião 060520  exact   NA</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt; 2              Buarcos              Buarcos 060520  exact   NA</span></span></code></pre></div>
+<p>Both are <code>060520</code>: the freguesia was called Buarcos until
+it was renamed in 2015.</p>
+<p><code>nuts_vintage</code> does the same for NUTS:
+<code>get_map(&quot;nuts3&quot;, nuts_vintage = &quot;2013&quot;)</code> draws the 25 NUTS 3
+regions of the 2013 revision, from the bundled data, with nothing to
+download. Any NUTS revision combines with either freguesia map, because
+every revision groups whole municipalities. The health levels exist on
+the 2025 map only.</p>
+<p><code>get_map()</code> doesn’t draw the maps from before 2013. For
+boundaries of that era, download the census areas with
+<code>get_censos()</code>. Their <code>dtmnfr</code> column holds the
+code of that census’s map (<code>&quot;2011&quot;</code> for 2011,
+<code>&quot;2001&quot;</code> for 2001), so they can be merged into
+freguesias:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>bgri <span class="ot">&lt;-</span> <span class="fu">get_censos</span>(<span class="at">region =</span> <span class="st">&quot;ram&quot;</span>, <span class="at">year =</span> <span class="dv">2011</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>                   <span class="at">variables =</span> <span class="st">&quot;N_INDIVIDUOS_RESIDENT&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>freg_2011 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(bgri[<span class="st">&quot;N_INDIVIDUOS_RESIDENT&quot;</span>],</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>                       <span class="at">by =</span> <span class="fu">list</span>(<span class="at">dtmnfr =</span> bgri<span class="sc">$</span>dtmnfr), <span class="at">FUN =</span> sum)</span></code></pre></div>
+</div>
+<div id="nuts-regions" class="section level2">
+<h2>NUTS regions</h2>
+<p>The NUTS regions are groups of municipalities, and they’re revised
+every few years. geopt has three revisions:</p>
+<table>
+<thead>
+<tr class="header">
+<th><code>nuts_vintage</code></th>
+<th>In use</th>
+<th>NUTS 3 regions</th>
+<th>Law</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;2002&quot;</code></td>
+<td>2002 to 2015</td>
+<td>30</td>
+<td>Decreto-Lei 244/2002</td>
+</tr>
+<tr class="even">
+<td><code>&quot;2013&quot;</code></td>
+<td>2015 to 2024</td>
+<td>25</td>
+<td>Regulation (EU) 868/2014</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;2024&quot;</code></td>
+<td>since 2024</td>
+<td>26</td>
+<td>Delegated Regulation (EU) 2023/674</td>
+</tr>
+</tbody>
+</table>
+<p>Because they’re built from municipalities, <code>pt_nuts_codes</code>
+lists each municipality’s region in every revision. Covilhã, for
+example, moved to a new NUTS 3 region in 2013:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>pt_nuts_codes[pt_nuts_codes<span class="sc">$</span>dtmn <span class="sc">==</span> <span class="st">&quot;0503&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;nuts_vintage&quot;</span>, <span class="st">&quot;nuts3_cod&quot;</span>, <span class="st">&quot;nuts3&quot;</span>)]</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt;     nuts_vintage nuts3_cod                     nuts3</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; 62          2002     PT16A             Cova da Beira</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; 370         2013     PT16J Beiras e Serra da Estrela</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; 678         2024     PT196 Beiras e Serra da Estrela</span></span></code></pre></div>
+<p><code>pt_lookup(nuts_vintage = )</code> gives the whole table for one
+revision.</p>
+<p>The NUTS revision is independent of the freguesia map. INE publishes
+the same freguesias under more than one NUTS revision, so choose
+<code>nuts_vintage</code> and <code>admin_vintage</code> separately.</p>
+<div id="matching-nuts-names-say-which-revision" class="section level3">
+<h3>Matching NUTS names: say which revision</h3>
+<p><code>pt_match()</code> matches NUTS names against the current
+revision unless told otherwise. Some older names cover territory that is
+split between several regions today, so they aren’t matched. The 2002
+region of Tâmega, for example, is spread across four of today’s NUTS 3
+regions:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Tâmega&quot;</span>, <span class="st">&quot;Alto Trás-os-Montes&quot;</span>), <span class="at">level =</span> <span class="st">&quot;nuts3&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt; [1] NA NA</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt;                 input matched_name code    method dist</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; 1              Tâmega         &lt;NA&gt; &lt;NA&gt; ambiguous   NA</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; 2 Alto Trás-os-Montes         &lt;NA&gt; &lt;NA&gt; ambiguous   NA</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Tâmega&quot;</span>, <span class="st">&quot;Alto Trás-os-Montes&quot;</span>), <span class="at">level =</span> <span class="st">&quot;nuts3&quot;</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>         <span class="at">nuts_vintage =</span> <span class="st">&quot;2002&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;PT115&quot; &quot;PT118&quot;</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="co">#&gt;                 input        matched_name  code method dist</span></span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a><span class="co">#&gt; 1              Tâmega              Tâmega PT115  exact   NA</span></span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="co">#&gt; 2 Alto Trás-os-Montes Alto Trás-os-Montes PT118  exact   NA</span></span></code></pre></div>
+<p>The riskier case is a name that both revisions use for different
+areas. It matches today’s region, with no sign that the area has
+changed:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;Ave&quot;</span>, <span class="at">level =</span> <span class="st">&quot;nuts3&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)                        <span class="co"># today&#39;s Ave</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;PT119&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt;   input matched_name  code method dist</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; 1   Ave          Ave PT119  exact   NA</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;Ave&quot;</span>, <span class="at">level =</span> <span class="st">&quot;nuts3&quot;</span>, <span class="at">nuts_vintage =</span> <span class="st">&quot;2002&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>) <span class="co"># the 2002 Ave</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;PT113&quot;</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt;   input matched_name  code method dist</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="co">#&gt; 1   Ave          Ave PT113  exact   NA</span></span></code></pre></div>
+<p>Five NUTS 3 names are used by both the 2002 and current revisions for
+different groups of municipalities:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> pt_nuts_codes</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>members <span class="ot">&lt;-</span> <span class="cf">function</span>(v, nm) <span class="fu">sort</span>(n<span class="sc">$</span>dtmn[n<span class="sc">$</span>nuts_vintage <span class="sc">==</span> v <span class="sc">&amp;</span> n<span class="sc">$</span>nuts3 <span class="sc">==</span> nm])</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>shared <span class="ot">&lt;-</span> <span class="fu">intersect</span>(n<span class="sc">$</span>nuts3[n<span class="sc">$</span>nuts_vintage <span class="sc">==</span> <span class="st">&quot;2002&quot;</span>],</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>                    n<span class="sc">$</span>nuts3[n<span class="sc">$</span>nuts_vintage <span class="sc">==</span> <span class="st">&quot;2024&quot;</span>])</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>moved <span class="ot">&lt;-</span> <span class="fu">Filter</span>(<span class="cf">function</span>(nm) <span class="sc">!</span><span class="fu">identical</span>(<span class="fu">members</span>(<span class="st">&quot;2002&quot;</span>, nm), <span class="fu">members</span>(<span class="st">&quot;2024&quot;</span>, nm)),</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>                shared)</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>moved</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Ave&quot;              &quot;Douro&quot;            &quot;Alentejo Central&quot; &quot;Alto Alentejo&quot;   </span></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Médio Tejo&quot;</span></span></code></pre></div>
+<p>So when matching the regions in an INE series, check which NUTS
+revision the series uses, and pass it as <code>nuts_vintage</code>. Of
+the 28 NUTS 3 names INE publishes under “NUTS - 2002”, 22 match without
+<code>nuts_vintage</code>, but only to today’s regions of the same name.
+With it, all 28 match the right 2002 regions.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

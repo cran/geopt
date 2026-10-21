@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Joining data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Joining data</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(geopt)</span></code></pre></div>
+<p>Portuguese data usually identifies places in one of three ways: by
+official code (the 4-digit DTMN for a municipality, the 6-digit DTMNFR
+for a freguesia), by name, in whatever spelling the source uses, or by
+NUTS code. This guide shows how to get each of them onto a map, and how
+to deal with the usual problems: repeated names, lost leading zeros and
+spelling variants.</p>
+<div id="join-by-code-when-available" class="section level2">
+<h2>Join by code when available</h2>
+<p>Codes are unambiguous, so use them whenever possible:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dtmn =</span> <span class="fu">c</span>(<span class="st">&quot;1106&quot;</span>, <span class="st">&quot;1312&quot;</span>), <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">10</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">get_map</span>(<span class="st">&quot;municipio&quot;</span>, <span class="at">data =</span> df, <span class="at">by =</span> <span class="st">&quot;dtmn&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; get_map: 306 boundaries have no data row (NA fill).</span></span></code></pre></div>
+<p>Excel often turns <code>&quot;0115&quot;</code> into <code>115</code>. geopt
+restores the leading zeros when it joins. To fix a column directly:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">pt_pad_code</span>(<span class="fu">c</span>(<span class="dv">115</span>, <span class="dv">1106</span>), <span class="st">&quot;municipio&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0115&quot; &quot;1106&quot;</span></span></code></pre></div>
+</div>
+<div id="join-by-name" class="section level2">
+<h2>Join by name</h2>
+<p>Names are matched by <code>pt_match()</code>, which ignores accents,
+case and punctuation, and reads the abbreviations <code>S.</code>,
+<code>Sta.</code> and <code>Sto.</code> as São, Santa and Santo:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">concelho =</span> <span class="fu">c</span>(<span class="st">&quot;porto&quot;</span>, <span class="st">&quot;CÂMARA DE LOBOS&quot;</span>, <span class="st">&quot;S. João da Madeira&quot;</span>),</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                 <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">pt_match</span>(df<span class="sc">$</span>concelho)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1312&quot; &quot;3102&quot; &quot;0116&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;                input        matched_name code method dist</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 1              porto               Porto 1312  exact   NA</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 2    CÂMARA DE LOBOS     Câmara de Lobos 3102  exact   NA</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 3 S. João da Madeira São João da Madeira 0116  exact   NA</span></span></code></pre></div>
+<div id="repeated-names" class="section level3">
+<h3>Repeated names</h3>
+<p>Some names are shared: two municipalities are called
+<strong>Lagoa</strong> (one in Faro district, one on São Miguel), and
+196 freguesia names are used by more than one freguesia. A name that
+fits more than one unit returns <code>NA</code> with a warning. geopt
+never guesses:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;Lagoa&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Warning: pt_match: 1 ambiguous name(s) returned NA. Pass `context` or use codes.</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;   &#39;Lagoa&#39; (2 candidates: Faro, Ilha de São Miguel)</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt;   input matched_name code    method dist</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; 1 Lagoa         &lt;NA&gt; &lt;NA&gt; ambiguous   NA</span></span></code></pre></div>
+<p>There are two ways to say which one is meant. Add the region in
+brackets after the name, as INE’s files often do, or pass a
+<code>context</code>, the unit it belongs to:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Lagoa (Faro)&quot;</span>, <span class="st">&quot;Lagoa (Açores)&quot;</span>, <span class="st">&quot;Lagoa (R.A.A.)&quot;</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0806&quot; &quot;4201&quot; &quot;4201&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;            input matched_name code method dist</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; 1   Lagoa (Faro)        Lagoa 0806  exact   NA</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; 2 Lagoa (Açores)        Lagoa 4201  exact   NA</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 3 Lagoa (R.A.A.)        Lagoa 4201  exact   NA</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;Lagoa&quot;</span>, <span class="at">context =</span> <span class="st">&quot;Faro&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0806&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;   input matched_name code method dist</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 1 Lagoa        Lagoa 0806  exact   NA</span></span></code></pre></div>
+<p>At freguesia level, repeated names are common, so always give the
+municipality as context. No municipality has two freguesias with the
+same name, so this always settles it:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">freg =</span> <span class="fu">c</span>(<span class="st">&quot;Pinheiro&quot;</span>, <span class="st">&quot;Pinheiro&quot;</span>),</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                 <span class="at">mun  =</span> <span class="fu">c</span>(<span class="st">&quot;Guimarães&quot;</span>, <span class="st">&quot;Castro Daire&quot;</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">pt_match</span>(df<span class="sc">$</span>freg, <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>, <span class="at">context =</span> df<span class="sc">$</span>mun, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;030836&quot; &quot;180319&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;      input matched_name   code method dist</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 1 Pinheiro     Pinheiro 030836  exact   NA</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 2 Pinheiro     Pinheiro 180319  exact   NA</span></span></code></pre></div>
+</div>
+<div id="names-from-older-data" class="section level3">
+<h3>Names from older data</h3>
+<p>In 2013, about half of all freguesias were merged into <em>uniões de
+freguesias</em>, and in 2025 some of them were split again. Names from
+before 2013 match the freguesia that covers the same place today, so a
+file from an older census joins without being converted first:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Sé&quot;</span>, <span class="st">&quot;Maximinos&quot;</span>), <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>         <span class="at">context =</span> <span class="st">&quot;Braga&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;030364&quot; &quot;030364&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;       input      matched_name   code   method dist</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 1        Sé        Braga (Sé) 030364 historic   NA</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 2 Maximinos Braga (Maximinos) 030364 historic   NA</span></span></code></pre></div>
+<p>Both are now part of
+<code>União das freguesias de Braga (Maximinos, Sé e Cividade)</code>.
+The report marks these matches as <code>&quot;historic&quot;</code>, which shows
+how much of a join relied on old names. A name that is still in use
+always takes priority over an old one, so this never changes what a
+current name matches. Pass <code>historic = FALSE</code> to accept only
+current names.</p>
+<p>To get the code each freguesia had before 2013 instead, pass
+<code>admin_vintage = &quot;2011&quot;</code> (the map the 2011 census used). Each
+old freguesia then keeps its own code, rather than sharing the code of
+the união it joined:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Sé&quot;</span>, <span class="st">&quot;Maximinos&quot;</span>), <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>, <span class="at">context =</span> <span class="st">&quot;Braga&quot;</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>         <span class="at">admin_vintage =</span> <span class="st">&quot;2011&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;030352&quot; &quot;030324&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt;       input      matched_name   code method dist</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; 1        Sé        Braga (Sé) 030352  exact   NA</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 2 Maximinos Braga (Maximinos) 030324  exact   NA</span></span></code></pre></div>
+<p>To convert the <em>values</em> in a dataset between these versions of
+the map, see <code>pt_recode()</code> and
+<code>vignette(&quot;vintages&quot;)</code>.</p>
+</div>
+<div id="spelling-variants-and-typos" class="section level3">
+<h3>Spelling variants and typos</h3>
+<p>If a source consistently spells a name its own way, pass
+<code>aliases</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;VN Gaia&quot;</span>, <span class="at">aliases =</span> <span class="fu">c</span>(<span class="st">&quot;VN Gaia&quot;</span> <span class="ot">=</span> <span class="st">&quot;Vila Nova de Gaia&quot;</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1317&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;     input      matched_name code method dist</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 1 VN Gaia Vila Nova de Gaia 1317  alias   NA</span></span></code></pre></div>
+<p>For typos, turn on fuzzy matching (this needs the stringdist
+package). It only runs on names that didn’t match exactly, only accepts
+a candidate that is clearly the closest, and reports every match it
+makes:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;Guimaraess&quot;</span>, <span class="at">fuzzy =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; pt_match: 1 fuzzy match(es):</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt;   &#39;Guimaraess&#39; -&gt; &#39;Guimarães&#39; (dist 1)</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0308&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;        input matched_name code method dist</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; 1 Guimaraess    Guimarães 0308  fuzzy    1</span></span></code></pre></div>
+</div>
+<div id="checking-what-matched" class="section level3">
+<h3>Checking what matched</h3>
+<p>Every result from <code>pt_match()</code> and <code>pt_join()</code>
+carries a report. Check it before trusting a join:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">pt_match</span>(<span class="fu">c</span>(<span class="st">&quot;Porto&quot;</span>, <span class="st">&quot;Lagoa&quot;</span>, <span class="st">&quot;Atlantis&quot;</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">pt_match_report</span>(res)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;      input matched_name code    method dist</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; 1    Porto        Porto 1312     exact   NA</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; 2    Lagoa         &lt;NA&gt; &lt;NA&gt; ambiguous   NA</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 3 Atlantis         &lt;NA&gt; &lt;NA&gt; unmatched   NA</span></span></code></pre></div>
+<p>The <code>method</code> column says how each input was matched, or
+why it wasn’t:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>method</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>code</code></td>
+<td>the input was an official code</td>
+</tr>
+<tr class="even">
+<td><code>exact</code></td>
+<td>the name matched, once accents, case and punctuation were
+ignored</td>
+</tr>
+<tr class="odd">
+<td><code>loose</code></td>
+<td>the name matched once small words like “da” or “dos” were
+ignored</td>
+</tr>
+<tr class="even">
+<td><code>historic</code></td>
+<td>the name is from an older map, such as one from before 2013</td>
+</tr>
+<tr class="odd">
+<td><code>alias</code></td>
+<td>the name matched through <code>aliases</code></td>
+</tr>
+<tr class="even">
+<td><code>fuzzy</code></td>
+<td>a close spelling matched (only with <code>fuzzy = TRUE</code>)</td>
+</tr>
+<tr class="odd">
+<td><code>ambiguous</code></td>
+<td>more than one unit has this name: add a context</td>
+</tr>
+<tr class="even">
+<td><code>context_unrecognized</code></td>
+<td>the given context isn’t a unit geopt knows</td>
+</tr>
+<tr class="odd">
+<td><code>unmatched</code></td>
+<td>no unit has this name</td>
+</tr>
+<tr class="even">
+<td><code>empty</code></td>
+<td>the input was empty or <code>NA</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="three-ways-to-join" class="section level2">
+<h2>Three ways to join</h2>
+<p><strong><code>get_map(data =, by =)</code></strong> joins straight
+onto the boundaries, for maps:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">get_map</span>(<span class="st">&quot;municipio&quot;</span>, <span class="at">data =</span> df, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">municipio =</span> <span class="st">&quot;concelho&quot;</span>))</span></code></pre></div>
+<p><strong><code>pt_join()</code></strong> adds to the data frame the
+codes and the regions each unit belongs to, for work that doesn’t need a
+map. It only adds columns that have a single value for each unit at the
+level joined on. Some municipalities are split between several ULS, for
+example, so a join by municipality gets <code>uls_municipio</code>
+rather than <code>uls</code> (see
+<code>vignette(&quot;health-geographies&quot;)</code>):</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">concelho =</span> <span class="fu">c</span>(<span class="st">&quot;Porto&quot;</span>, <span class="st">&quot;Águeda&quot;</span>), <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">pt_join</span>(df, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">municipio =</span> <span class="st">&quot;concelho&quot;</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; pt_join: 2/2 row(s) matched at municipio level.</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">names</span>(out)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;concelho&quot;       &quot;value&quot;          &quot;dtmn&quot;           &quot;municipio&quot;     </span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;dt&quot;             &quot;distrito_ilha&quot;  &quot;nuts1_cod&quot;      &quot;nuts1&quot;         </span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;nuts2_cod&quot;      &quot;nuts2&quot;          &quot;nuts3_cod&quot;      &quot;nuts3&quot;         </span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; [13] &quot;reg_saude&quot;      &quot;uls_municipio&quot;  &quot;reg_saude_2022&quot; &quot;aces_municipio&quot;</span></span></code></pre></div>
+<p>Like <code>pt_match()</code>, <code>pt_join()</code> takes
+<code>admin_vintage</code> and <code>nuts_vintage</code>. INE publishes
+freguesias on the 2013 map, so for its data
+<code>admin_vintage = &quot;2013&quot;</code> (or <code>&quot;auto&quot;</code>) keeps the
+2013 codes and adds that map’s names, and <code>nuts_vintage</code>
+picks the NUTS revision of the regions added:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>ine <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dtmnfr =</span> <span class="st">&quot;030882&quot;</span>, <span class="at">value =</span> <span class="dv">3</span>)  <span class="co"># a união split in 2025</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">pt_join</span>(ine, <span class="at">by =</span> <span class="st">&quot;dtmnfr&quot;</span>, <span class="at">admin_vintage =</span> <span class="st">&quot;2013&quot;</span>)[, <span class="fu">c</span>(<span class="st">&quot;dtmnfr&quot;</span>, <span class="st">&quot;freguesia&quot;</span>, <span class="st">&quot;municipio&quot;</span>)]</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; pt_join: 1/1 row(s) matched at freguesia level.</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt;   dtmnfr                                 freguesia municipio</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; 1 030882 União das freguesias de Conde e Gandarela Guimarães</span></span></code></pre></div>
+<p><strong><code>pt_lookup()</code></strong> returns the table of codes
+and regions itself, as a plain data frame, ready for any other kind of
+join. Health columns are only added when <code>health_vintage</code>
+says which version of the health map to use:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>codes <span class="ot">&lt;-</span> <span class="fu">pt_lookup</span>(<span class="at">health_vintage =</span> <span class="st">&quot;2024&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">head</span>(codes[, <span class="fu">c</span>(<span class="st">&quot;dtmnfr&quot;</span>, <span class="st">&quot;freguesia&quot;</span>, <span class="st">&quot;dtmn&quot;</span>, <span class="st">&quot;municipio&quot;</span>, <span class="st">&quot;nuts3_cod&quot;</span>, <span class="st">&quot;unit&quot;</span>)])</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt;   dtmnfr                                         freguesia dtmn municipio</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; 1 010103                                    Aguada de Cima 0101    Águeda</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; 2 010109                                       Fermentelos 0101    Águeda</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; 3 010112                                Macinhata do Vouga 0101    Águeda</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; 4 010119                                  Valongo do Vouga 0101    Águeda</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; 5 010124      União das freguesias de Recardães e Espinhel 0101    Águeda</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; 6 010125 União das freguesias de Travassô e Óis da Ribeira 0101    Águeda</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt;   nuts3_cod                 unit</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; 1     PT191 ULS Região de Aveiro</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; 2     PT191 ULS Região de Aveiro</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt; 3     PT191 ULS Região de Aveiro</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt; 4     PT191 ULS Região de Aveiro</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt; 5     PT191 ULS Região de Aveiro</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt; 6     PT191 ULS Região de Aveiro</span></span></code></pre></div>
+</div>
+<div id="cleaning-names-directly" class="section level2">
+<h2>Cleaning names directly</h2>
+<p>The name cleaning that <code>pt_match()</code> uses is available as
+<code>pt_normalize()</code>, so the same rules can be applied to any
+column before a manual join:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">pt_normalize</span>(<span class="fu">c</span>(<span class="st">&quot;S. Jorge&quot;</span>, <span class="st">&quot;SÃO JORGE&quot;</span>, <span class="st">&quot;Sao-Jorge&quot;</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;sao jorge&quot; &quot;sao jorge&quot; &quot;sao jorge&quot;</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

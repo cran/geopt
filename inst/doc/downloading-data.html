@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Downloading official data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Downloading official data</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(geopt)</span></code></pre></div>
+<p>The bundled boundaries are simplified so they plot quickly. geopt can
+also download data from the two official sources:</p>
+<ul>
+<li><strong>DGT</strong> (Direção-Geral do Território): the
+full-resolution official boundaries (CAOP), and other datasets such as
+land cover, through its online service.</li>
+<li><strong>INE</strong> (Instituto Nacional de Estatística): the census
+areas, from single city blocks upwards, with the census data
+attached.</li>
+</ul>
+<p>Downloads go through <code>GeoClient</code>, an <code>R6</code>
+object that holds the settings, such as where to cache:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>client <span class="ot">&lt;-</span> GeoClient<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>client</span></code></pre></div>
+<p>Everything the client downloads is cached under
+<code>tools::R_user_dir(&quot;geopt&quot;, &quot;cache&quot;)</code>, so later calls are
+instant and work offline. To use another folder, pass
+<code>GeoClient$new(cache_dir = ...)</code>.</p>
+<p>If a download fails, because a server can’t be reached or a file has
+moved, the error says which and why:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># With no internet connection</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>bgri <span class="ot">&lt;-</span> <span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; Downloading Censos 2021 0303 (BGRI2021_0303.zip)...</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Error: Could not reach mapas.ine.pt: Could not resolve hostname</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [mapas.ine.pt]: Could not resolve host: mapas.ine.pt. Check your internet</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; connection, or try again later.</span></span></code></pre></div>
+<p>These errors have the class <code>geopt_download_error</code>, so a
+script can catch failed downloads without hiding other errors. For
+example, to carry on with the municipalities that did download:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>bgri <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">c</span>(<span class="st">&quot;Braga&quot;</span>, <span class="st">&quot;Guimarães&quot;</span>), <span class="cf">function</span>(m) {</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">tryCatch</span>(<span class="fu">get_censos</span>(m), <span class="at">geopt_download_error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>})</span></code></pre></div>
+<div id="full-resolution-caop-boundaries" class="section level2">
+<h2>Full-resolution CAOP boundaries</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Latest year, full detail, as sf</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>mun <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_caop</span>(<span class="st">&quot;continente&quot;</span>, <span class="st">&quot;municipio&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># A specific year and a simplification preset</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>freg_2022 <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_caop</span>(<span class="st">&quot;continente&quot;</span>, <span class="st">&quot;freguesia&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                             <span class="at">year =</span> <span class="dv">2022</span>, <span class="at">detail =</span> <span class="st">&quot;medium&quot;</span>)</span></code></pre></div>
+<p>The regions are <code>&quot;continente&quot;</code>, <code>&quot;raa&quot;</code>
+(Açores) and <code>&quot;ram&quot;</code> (Madeira). The levels run from
+<code>&quot;freguesia&quot;</code> to <code>&quot;nuts3&quot;</code>. When a year’s file has
+no NUTS layer, geopt builds it by merging municipalities.
+<code>detail</code> simplifies the boundaries (<code>&quot;full&quot;</code>,
+<code>&quot;high&quot;</code>, <code>&quot;medium&quot;</code>, <code>&quot;low&quot;</code> or
+<code>&quot;very_low&quot;</code>; this needs the rmapshaper package), and each
+combination is cached.</p>
+<p>To download the files without loading them, for example to read them
+with other tools:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>paths <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">download_caop</span>(<span class="st">&quot;continente&quot;</span>, <span class="at">year =</span> <span class="dv">2024</span>)</span></code></pre></div>
+</div>
+<div id="filtered-queries-to-dgts-online-service" class="section level2">
+<h2>Filtered queries to DGT’s online service</h2>
+<p>To get only part of a dataset, <code>get_ogc()</code> calls DGT’s
+online service (<code>https://ogcapi.dgterritorio.gov.pt</code>, which
+follows the OGC API standard) to do the filtering, so the whole country
+isn’t downloaded:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># One district&#39;s municipalities</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>lisboa <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_ogc</span>(<span class="st">&quot;municipios&quot;</span>, <span class="at">properties =</span> <span class="fu">list</span>(<span class="at">distrito =</span> <span class="st">&quot;Lisboa&quot;</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Everything inside a rectangle (longitude and latitude)</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>box <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_ogc</span>(<span class="st">&quot;freguesias&quot;</span>, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">9.3</span>, <span class="fl">38.6</span>, <span class="sc">-</span><span class="fl">9.0</span>, <span class="fl">38.85</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># A filter expression, in the service&#39;s query language (CQL)</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>alg <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_ogc</span>(<span class="st">&quot;municipios&quot;</span>, <span class="at">cql_filter =</span> <span class="st">&quot;distrito_ilha = &#39;Faro&#39;&quot;</span>)</span></code></pre></div>
+<p>The land cover maps (COS) and the land registry
+(<code>cadastro</code>) are large, so for these a filter is
+<strong>required</strong>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>cos <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_ogc</span>(<span class="st">&quot;cos2023v1&quot;</span>, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.45</span>, <span class="fl">40.15</span>, <span class="sc">-</span><span class="fl">8.35</span>, <span class="fl">40.25</span>))</span></code></pre></div>
+<p>To see what datasets the service offers right now:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>client<span class="sc">$</span><span class="fu">list_ogc_collections</span>()</span></code></pre></div>
+<p>Raster datasets, such as aerial photographs, aren’t supported yet.
+The error message suggests how to read them with the terra package or
+GDAL instead.</p>
+</div>
+<div id="census-areas-subsecções-secções-and-the-1-km-grid" class="section level2">
+<h2>Census areas: subsecções, secções and the 1 km grid</h2>
+<p>INE publishes the areas the census is counted in, with the census
+data attached to each file:</p>
+<ul>
+<li><strong>subsecções</strong>, the smallest areas: city blocks in
+towns, villages or parts of villages in the countryside. They form the
+BGRI (Base Geográfica de Referenciação de Informação), available for the
+1991, 2001, 2011 and 2021 censuses.</li>
+<li><strong>secções</strong>, statistical sections made of several
+subsecções.</li>
+<li>a <strong>1 km grid</strong>, for 2021 only.</li>
+</ul>
+<p><code>get_censos()</code> downloads the smallest file that covers the
+request: a municipality is a 1–3 MB file, not a 250 MB download for the
+whole country.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># City blocks of Braga, 2021 variables included</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>bgri <span class="ot">&lt;-</span> <span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">ggplot</span>(bgri) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> N_INDIVIDUOS <span class="sc">/</span> <span class="fu">as.numeric</span>(sf<span class="sc">::</span><span class="fu">st_area</span>(geometry)) <span class="sc">*</span> <span class="fl">1e6</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>          <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">&quot;hab/km²&quot;</span>, <span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>)</span></code></pre></div>
+<p>Choose the area with <code>municipio</code>, <code>freguesia</code>
+or <code>region</code> (a NUTS 2 or NUTS 3 name,
+<code>&quot;continente&quot;</code>, <code>&quot;raa&quot;</code>, <code>&quot;ram&quot;</code> or
+<code>&quot;portugal&quot;</code>). There’s deliberately no default, so the whole
+country can’t be downloaded by accident. The same call works for every
+census year and level:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># The 2011 census has 122 variables; keep only some</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>, <span class="at">year =</span> <span class="dv">2011</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>           <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">&quot;N_INDIVIDUOS_RESIDENT&quot;</span>, <span class="st">&quot;N_EDIFICIOS_CLASSICOS&quot;</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># Secções: INE&#39;s 2021 files have about 180 variables.</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co"># For earlier censuses, geopt merges the subsecções and adds up their counts.</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>, <span class="at">level =</span> <span class="st">&quot;seccao&quot;</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>, <span class="at">level =</span> <span class="st">&quot;seccao&quot;</span>, <span class="at">year =</span> <span class="dv">2011</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co"># A NUTS3, and the 2021-only 1 km grid (region scope only)</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="fu">get_censos</span>(<span class="at">region =</span> <span class="st">&quot;Cávado&quot;</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="fu">get_censos</span>(<span class="at">region =</span> <span class="st">&quot;continente&quot;</span>, <span class="at">level =</span> <span class="st">&quot;grid&quot;</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co"># Data without geometry</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>, <span class="at">geometry =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><code>pt_censos_vars</code> lists the variables for each year and
+level:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">head</span>(pt_censos_vars[pt_censos_vars<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2021</span> <span class="sc">&amp;</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                      pt_censos_vars<span class="sc">$</span>level <span class="sc">==</span> <span class="st">&quot;subseccao&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                    <span class="fu">c</span>(<span class="st">&quot;variable&quot;</span>, <span class="st">&quot;description&quot;</span>)])</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;                                              variable</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; 325                              N_ADP_1_OU_2_PESSOAS</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; 326                           N_ADP_3_OU_MAIS_PESSOAS</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; 327                   N_AGREGADOS_DOMESTICOS_PRIVADOS</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; 328                 N_ALOJAMENTOS_FAM_CLASS_RHABITUAL</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; 329 N_ALOJAMENTOS_FAM_CLASS_VAGOS_OU_RESID_SECUNDARIA</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; 330                          N_ALOJAMENTOS_FAMILIARES</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt;                                                                  description</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; 325                   Nº de agregados domésticos privados com 1 ou 2 pessoas</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 326                Nº de agregados domésticos privados com 3 ou mais pessoas</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; 327                                      Nº de agregados domésticos privados</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; 328            Nº de alojamentos familiares clássicos de residência habitual</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; 329 Nº de alojamentos familiares clássicos vagos ou de residência secundária</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; 330                                             Nº de alojamentos familiares</span></span></code></pre></div>
+<p>INE names its code columns differently in each census
+(<code>DTMN11</code> in 2011, <code>DTMN21</code> in 2021, and so on).
+<code>get_censos()</code> adds the same codes under names that stay the
+same every year (<code>bgri</code>, <code>dtmn</code>,
+<code>dtmnfr</code>, <code>seccao</code>, <code>subseccao</code>, and
+<code>lugar</code> where the file has it), so results from different
+censuses line up, and join with <code>pt_lookup()</code>. Each census
+uses the freguesias of its own time, though, so the 2011 freguesia codes
+aren’t today’s: see <code>vignette(&quot;vintages&quot;)</code>.</p>
+<p>To use a client’s cache and settings, pass it as
+<code>get_censos(&quot;Braga&quot;, client = client)</code>.</p>
+</div>
+<div id="exporting-for-dashboards" class="section level2">
+<h2>Exporting for dashboards</h2>
+<p><code>export_boundaries()</code> writes GeoJSON or GeoPackage files,
+in WGS84 by default, and can simplify the boundaries on the way out:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>client<span class="sc">$</span><span class="fu">export_boundaries</span>(mun, <span class="st">&quot;municipios.geojson&quot;</span>, <span class="at">detail =</span> <span class="st">&quot;low&quot;</span>)</span></code></pre></div>
+</div>
+<div id="cache-management" class="section level2">
+<h2>Cache management</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>client<span class="sc">$</span><span class="fu">list_cached</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>client<span class="sc">$</span><span class="fu">clear_cache</span>(<span class="st">&quot;processed&quot;</span>)  <span class="co"># or &quot;raw&quot;, &quot;all&quot;</span></span></code></pre></div>
+</div>
+<div id="relationship-to-the-rest-of-geopt" class="section level2">
+<h2>Relationship to the rest of geopt</h2>
+<p><code>get_map()</code> and <code>plot_pt()</code> don’t need the
+GeoClient for the current map: they use the bundled boundaries.
+<code>get_map(admin_vintage = &quot;2013&quot;)</code>, the one earlier map they
+can draw, uses a <code>GeoClient</code> (and its cache) to download it
+the first time it’s needed.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

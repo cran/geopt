@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Get started with geopt</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Get started with geopt</h1>
+
+
+
+<p>geopt provides maps of Portugal that are ready to plot, with the
+Açores and Madeira included, and the tools to put custom data on them.
+It also keeps track of how the boundaries have changed over the years,
+and downloads the full-resolution official data when needed.</p>
+<p>This page is a short tour. Each section points to the guide that
+covers its topic in full.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(geopt)</span></code></pre></div>
+<div id="portugals-units-in-brief" class="section level2">
+<h2>Portugal’s units in brief</h2>
+<p>geopt can draw any of these levels. The <code>level</code> value is
+what its functions expect:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>level</code></th>
+<th>What it is</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;freguesia&quot;</code></td>
+<td>Civil parish, the smallest administrative unit.</td>
+<td>3 259</td>
+</tr>
+<tr class="even">
+<td><code>&quot;municipio&quot;</code></td>
+<td>Municipality (município, also called concelho). LAU units</td>
+<td>308</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;distrito&quot;</code></td>
+<td>District on the mainland. Each island in Açores and Madeira</td>
+<td>29</td>
+</tr>
+<tr class="even">
+<td><code>&quot;nuts1&quot;</code>, <code>&quot;nuts2&quot;</code>,
+<code>&quot;nuts3&quot;</code></td>
+<td>The EU’s statistical regions (NUTS)</td>
+<td>3, 9, 26</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;uls&quot;</code></td>
+<td>Local health units (Unidades Locais de Saúde) and their island
+equivalents</td>
+<td>55</td>
+</tr>
+<tr class="even">
+<td><code>&quot;reg_saude&quot;</code></td>
+<td>Health regions (regiões de saúde)</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td><code>&quot;aces&quot;</code></td>
+<td>Groups of primary-care centres (ACES), the health units before
+2024</td>
+<td>71</td>
+</tr>
+<tr class="even">
+<td><code>&quot;uls_municipio&quot;</code>, <code>&quot;aces_municipio&quot;</code></td>
+<td>ULS and ACES for data by municipality: those that share a
+municipality are combined</td>
+<td>50, 66</td>
+</tr>
+</tbody>
+</table>
+<p>Freguesias and municipalities also have official codes. A freguesia’s
+code (DTMNFR) has six digits: the first four are its municipality’s code
+(DTMN), and the first two are its district’s (DT). These are the names
+DGT and INE use today. Older datasets may call them DICOFRE and DICO.
+For example, Gualtar, <code>&quot;030319&quot;</code>, is a freguesia of Braga
+municipality (<code>&quot;0303&quot;</code>), in Braga district
+(<code>&quot;03&quot;</code>).</p>
+</div>
+<div id="a-map-in-one-line" class="section level2">
+<h2>A map in one line</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">concelho =</span> <span class="fu">c</span>(<span class="st">&quot;Porto&quot;</span>,<span class="st">&quot;Lisboa&quot;</span>,<span class="st">&quot;Braga&quot;</span>,<span class="st">&quot;Coimbra&quot;</span>,<span class="st">&quot;Faro&quot;</span>,<span class="st">&quot;Lagoa (Açores)&quot;</span>,<span class="st">&quot;Santana (RAM)&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">15</span>, <span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">18</span>, <span class="dv">12</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">plot_pt</span>(df, <span class="at">value =</span> <span class="st">&quot;score&quot;</span>, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">municipio =</span> <span class="st">&quot;concelho&quot;</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; get_map: 301 boundaries have no data row (NA fill).</span></span></code></pre></div>
+<p><img role="img" aria-label src="data:image/png;base64,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" alt width="100%" /></p>
+<p><code>by = c(municipio = &quot;concelho&quot;)</code> tells geopt that the
+<code>concelho</code> column holds municipality names. geopt matched
+each name to its municipality, ignoring accents and case, and picked the
+right Lagoa: there are two, one in the Algarve and one in the Açores.
+The islands are moved next to the mainland so the map stays readable.
+For the mainland alone, add <code>islands = &quot;none&quot;</code>.</p>
+<p>The result is a regular ggplot that can be styled using native
+<code>ggplot</code> grammar. For an interactive map, add
+<code>renderer = &quot;echarts&quot;</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">plot_pt</span>(df, <span class="at">value =</span> <span class="st">&quot;score&quot;</span>, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">municipio =</span> <span class="st">&quot;concelho&quot;</span>),</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>        <span class="at">renderer =</span> <span class="st">&quot;echarts&quot;</span>)</span></code></pre></div>
+</div>
+<div id="check-what-matched" class="section level2">
+<h2>Check what matched</h2>
+<p>When every name is found, matching happens quietly. When some aren’t,
+geopt says so instead of guessing:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">concelho =</span> <span class="fu">c</span>(<span class="st">&quot;Porto&quot;</span>, <span class="st">&quot;Lagoa&quot;</span>, <span class="st">&quot;Lisbon&quot;</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">score    =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">18</span>, <span class="dv">25</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>joined <span class="ot">&lt;-</span> <span class="fu">pt_join</span>(df, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">municipio =</span> <span class="st">&quot;concelho&quot;</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; Warning: pt_match: 1 ambiguous name(s) returned NA. Pass `context` or use codes.</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;   &#39;Lagoa&#39; (2 candidates: Faro, Ilha de São Miguel)</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; Warning: pt_match: 1 unmatched name(s): Lisbon</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; pt_join: 1/3 row(s) matched at municipio level.</span></span></code></pre></div>
+<p><code>pt_join()</code> adds the official codes to the data frame.
+<code>pt_match_report()</code> then shows what happened to each
+name:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">pt_match_report</span>(joined)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt;    input matched_name code    method dist</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; 1  Porto        Porto 1312     exact   NA</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; 2  Lagoa         &lt;NA&gt; &lt;NA&gt; ambiguous   NA</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; 3 Lisbon         &lt;NA&gt; &lt;NA&gt; unmatched   NA</span></span></code></pre></div>
+<p>Two municipalities are called Lagoa, so geopt leaves it unmatched,
+with the method “ambiguous” rather than pick one. “Lisbon” is an unknown
+name to geopt, therefore the method shows “unmatched”. To solve each of
+these, specify which Lagoa is meant by providing context - adding
+“(Açores)” or “(RAA)” to the name - and map the unknown name with
+<code>aliases</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df<span class="sc">$</span>concelho[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Lagoa (Açores)&quot;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>joined <span class="ot">&lt;-</span> <span class="fu">pt_join</span>(df, <span class="at">by =</span> <span class="fu">c</span>(<span class="at">municipio =</span> <span class="st">&quot;concelho&quot;</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                  <span class="at">aliases =</span> <span class="fu">c</span>(<span class="at">Lisbon =</span> <span class="st">&quot;Lisboa&quot;</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; pt_join: 3/3 row(s) matched at municipio level.</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>joined[, <span class="fu">c</span>(<span class="st">&quot;concelho&quot;</span>, <span class="st">&quot;dtmn&quot;</span>, <span class="st">&quot;municipio&quot;</span>, <span class="st">&quot;nuts3&quot;</span>, <span class="st">&quot;reg_saude&quot;</span>)]</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;         concelho dtmn municipio                       nuts3 reg_saude</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; 1          Porto 1312     Porto Área Metropolitana do Porto     Norte</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; 2 Lagoa (Açores) 4201     Lagoa  Região Autónoma dos Açores    Açores</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; 3         Lisbon 1106    Lisboa               Grande Lisboa       LVT</span></span></code></pre></div>
+<p>Besides the code, <code>pt_join()</code> adds the regions each unit
+belongs to, which is useful even when no map is drawn.
+<code>plot_pt()</code> and <code>get_map()</code> match names the same
+way, and warn the same way.</p>
+<p><code>vignette(&quot;joining-data&quot;)</code> covers joining by code,
+freguesia names, names from older data, and fuzzy matching for
+typos.</p>
+</div>
+<div id="maps-as-sf-objects" class="section level2">
+<h2>Maps as sf objects</h2>
+<p><code>plot_pt()</code> is a shortcut. For more control over the
+plotting, <code>get_map()</code> returns the same map as an sf object,
+which works with ggplot2, tmap or any other spatial package:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">get_map</span>(<span class="st">&quot;nuts3&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">head</span>(m[, <span class="fu">c</span>(<span class="st">&quot;nuts3_cod&quot;</span>, <span class="st">&quot;nuts3&quot;</span>, <span class="st">&quot;area_ha&quot;</span>)])</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; Simple feature collection with 6 features and 3 fields</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Bounding box:  xmin: -8.881058 ymin: 40.75888 xmax: -7.171606 ymax: 42.1482</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;   nuts3_cod                       nuts3  area_ha                       geometry</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 1     PT111                  Alto Minho 221884.2 MULTIPOLYGON (((-8.519346 4...</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 2     PT112                      Cávado 124579.1 MULTIPOLYGON (((-8.792077 4...</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 3     PT119                         Ave 145136.5 MULTIPOLYGON (((-8.440636 4...</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 4     PT11A Área Metropolitana do Porto 204126.9 MULTIPOLYGON (((-8.789006 4...</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 5     PT11B       Alto Tâmega e Barroso 292190.8 MULTIPOLYGON (((-7.325235 4...</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 6     PT11C              Tâmega e Sousa 183151.5 MULTIPOLYGON (((-8.379446 4...</span></span></code></pre></div>
+<p>Besides one row per region, the result has a few extra rows for the
+frames drawn around the islands, marked in the <code>geopt_type</code>
+column.</p>
+<p><code>get_map()</code> can also join data, with the same
+<code>data</code> and <code>by</code> arguments as
+<code>plot_pt()</code>.</p>
+<p>For boundaries in their true positions, without frames, use
+<code>islands = &quot;in_place&quot;</code>, or the bundled datasets:
+<code>pt_freguesias</code>, <code>pt_municipios</code>,
+<code>pt_distritos</code>, <code>pt_nuts1</code>, <code>pt_nuts2</code>,
+<code>pt_nuts3</code>, <code>pt_uls</code>, <code>pt_reg_saude</code>,
+<code>pt_aces</code>, <code>pt_uls_municipio</code> and
+<code>pt_aces_municipio</code>.</p>
+<p><code>vignette(&quot;map-compositions&quot;)</code> shows how to change the
+island layout and the frames and how to map a single region, such as the
+Açores, with examples for ggplot2, tmap, echarts4r and plotly.</p>
+</div>
+<div id="boundaries-change-over-time" class="section level2">
+<h2>Boundaries change over time</h2>
+<p>Portugal’s boundaries are redrawn from time to time, and data
+collected before a change uses the old units. geopt calls each version
+of a set of boundaries a <em>vintage</em>. Three things change, each on
+its own schedule, so each has its own argument:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What changes</th>
+<th>Argument</th>
+<th>Vintages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Freguesias</td>
+<td><code>admin_vintage</code></td>
+<td><code>&quot;2001&quot;</code> and <code>&quot;2011&quot;</code> (the 2001 and 2011
+censuses), <code>&quot;2013&quot;</code>, <code>&quot;2025&quot;</code> (current)</td>
+</tr>
+<tr class="even">
+<td>NUTS regions</td>
+<td><code>nuts_vintage</code></td>
+<td><code>&quot;2002&quot;</code>, <code>&quot;2013&quot;</code>, <code>&quot;2024&quot;</code>
+(current)</td>
+</tr>
+<tr class="odd">
+<td>Health regions</td>
+<td><code>health_vintage</code></td>
+<td><code>&quot;2022&quot;</code> (before the 2024 reform), <code>&quot;2024&quot;</code>
+(current)</td>
+</tr>
+</tbody>
+</table>
+<p>Each <code>*_vintage</code> argument is optional: left out, it means
+the current vintage.</p>
+<p>Municipalities haven’t changed since 1998, so they’re the same in
+every vintage.</p>
+<p><code>pt_lookup()</code> returns a table of units and the regions
+they belong to, for the requested vintages. The NUTS regions were
+revised in 2024. Lisboa and Setúbal are now in different NUTS 2 regions,
+but until then they shared one:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>now <span class="ot">&lt;-</span> <span class="fu">pt_lookup</span>(<span class="st">&quot;municipio&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>now[now<span class="sc">$</span>municipio <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Lisboa&quot;</span>, <span class="st">&quot;Setúbal&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;municipio&quot;</span>, <span class="st">&quot;nuts2_cod&quot;</span>, <span class="st">&quot;nuts2&quot;</span>)]</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;     municipio nuts2_cod                nuts2</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 153    Lisboa      PT1A        Grande Lisboa</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 229   Setúbal      PT1B Península de Setúbal</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>before <span class="ot">&lt;-</span> <span class="fu">pt_lookup</span>(<span class="st">&quot;municipio&quot;</span>, <span class="at">nuts_vintage =</span> <span class="st">&quot;2013&quot;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>before[before<span class="sc">$</span>municipio <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Lisboa&quot;</span>, <span class="st">&quot;Setúbal&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;municipio&quot;</span>, <span class="st">&quot;nuts2_cod&quot;</span>, <span class="st">&quot;nuts2&quot;</span>)]</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;     municipio nuts2_cod                        nuts2</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 153    Lisboa      PT17 Área Metropolitana de Lisboa</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 229   Setúbal      PT17 Área Metropolitana de Lisboa</span></span></code></pre></div>
+<p>A statistical series published before 2024 uses <code>PT17</code>, a
+code that no longer exists.</p>
+<p>Names from before a reorganization still match. In 2013, Braga’s
+freguesia of Sé was merged with two others. geopt finds the freguesia
+that covers it today, and marks the match as <code>historic</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">pt_match</span>(<span class="st">&quot;Sé&quot;</span>, <span class="at">level =</span> <span class="st">&quot;freguesia&quot;</span>, <span class="at">context =</span> <span class="st">&quot;Braga&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;030364&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;report&quot;)</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt;   input matched_name   code   method dist</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; 1    Sé   Braga (Sé) 030364 historic   NA</span></span></code></pre></div>
+<p><code>context = &quot;Braga&quot;</code> says which municipality to look in,
+since several cities have a freguesia called Sé.</p>
+<p><code>vignette(&quot;vintages&quot;)</code> covers converting data between
+vintages, maps of older years, and NUTS revisions.</p>
+</div>
+<div id="downloading-official-data" class="section level2">
+<h2>Downloading official data</h2>
+<p>The bundled boundaries are simplified so they plot quickly. geopt can
+also download official data: census data from INE, the statistics
+institute, down to the level of city blocks, and the full-resolution
+official boundaries (CAOP) from DGT, the mapping agency. Downloads are
+cached, so each file is only fetched once.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># 2021 census data for Braga&#39;s statistical sections, with their boundaries</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>braga <span class="ot">&lt;-</span> <span class="fu">get_censos</span>(<span class="st">&quot;Braga&quot;</span>, <span class="at">level =</span> <span class="st">&quot;seccao&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co"># Full-resolution municipality boundaries for the mainland</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>client <span class="ot">&lt;-</span> GeoClient<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>mun <span class="ot">&lt;-</span> client<span class="sc">$</span><span class="fu">get_caop</span>(<span class="st">&quot;continente&quot;</span>, <span class="st">&quot;municipio&quot;</span>)</span></code></pre></div>
+<p><code>pt_censos_vars</code> lists the census variables available for
+each year and level. <code>vignette(&quot;downloading-data&quot;)</code> covers
+the rest, including filtered queries to DGT’s online service.</p>
+</div>
+<div id="where-to-go-next" class="section level2">
+<h2>Where to go next</h2>
+<ul>
+<li><strong>Change the island layout</strong>, draw frames around the
+islands, or use tmap or echarts4r instead of ggplot2:
+<code>vignette(&quot;map-compositions&quot;)</code></li>
+<li><strong>Get data onto the map</strong> by code or by name, including
+ambiguous and misspelled names:
+<code>vignette(&quot;joining-data&quot;)</code></li>
+<li><strong>Map ULS, regiões de saúde or ACES</strong>:
+<code>vignette(&quot;health-geographies&quot;)</code></li>
+<li><strong>Work with older boundaries</strong>, or convert freguesia
+data across reorganizations: <code>vignette(&quot;vintages&quot;)</code></li>
+<li><strong>Download full-resolution CAOP</strong>, INE census data, or
+query DGT’s online service:
+<code>vignette(&quot;downloading-data&quot;)</code></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
